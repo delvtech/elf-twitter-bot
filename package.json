@@ -1,0 +1,30 @@
+{
+  "name": "elf-twitter-bot",
+  "version": "1.0.0",
+  "description": "Twitter bot for tweeting daily interest rates on Element",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/element-fi/elf-twitter-bot.git"
+  },
+  "author": "Sarah Mackey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/element-fi/elf-twitter-bot/issues"
+  },
+  "homepage": "https://github.com/element-fi/elf-twitter-bot#readme",
+  "dependencies": {
+    "csv-parse": "^4.16.0",
+    "ethers": "^5.4.2",
+    "hardhat": "^2.5.0",
+    "node-csv": "^0.1.2",
+    "shelljs": "^0.8.4",
+    "twit": "^2.2.11"
+  },
+  "devDependencies": {
+    "@types/node": "^16.4.1"
+  }
+}
