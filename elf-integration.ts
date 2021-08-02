@@ -68,8 +68,8 @@ async function main() {
 
       const totalSupply = await getTotalSupply(ptPool, signer);
       let reserves = await getReserves(ptPool, balancerVaultAddress, signer);
-      const ptIndex = reserves.tokens[0].toLowerCase() == base ? 1 : 0;
-      let baseIndex = reserves.tokens[0].toLowerCase() == base ? 0 : 1;
+      const ptIndex = reserves.tokens[0].toLowerCase() == base.toLowerCase() ? 1 : 0;
+      let baseIndex = reserves.tokens[0].toLowerCase() == base.toLowerCase() ? 0 : 1;
       const ptReserves = reserves.balances[ptIndex];
       let baseReserves = reserves.balances[baseIndex];
       const baseDecimals = reserves.decimals[baseIndex];
