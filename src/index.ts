@@ -32,18 +32,45 @@ import { getUnitSeconds } from "../elf-sdk/src/helpers/getUnitSeconds";
 import { calcSpotPricePt } from "../elf-sdk/src/helpers/calcSpotPrice";
 import { calcFixedAPR } from "../elf-sdk/src/helpers/calcFixedAPR";
 
-async function main() {
+async function sendTweet(tweetBody: string) {
+  // Initialize Twitter env variables
+  const CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY || "";
+  const CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET || "";
+  const ACCESS_TOKEN = process.env.TWITTER_ACCESS_TOKEN || "";
+  const ACCESS_TOKEN_SECRET = process.env.TWITTER_ACCESS_TOKEN_SECRET || "";
+
+  var Twit = require("twit");
+  var T = new Twit({
+    consumer_key: CONSUMER_KEY,
+    consumer_secret: CONSUMER_SECRET,
+    access_token: ACCESS_TOKEN,
+    access_token_secret: ACCESS_TOKEN_SECRET,
+    timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
+    strictSSL: true, // optional - requires SSL certificates to be valid.
+  });
+
+  T.post(
+    "statuses/update",
+    { status: tweetBody },
+    function (err, data, response) {
+      console.log(data);
+    }
+  );
+}
+
+async function generateAPR(terms: string[]): Promise<string>{
+
+  let body = "";
 
   const [signer] = await ethers.getSigners();
 
   // get the official list of Element deployed addresses.
   const deploymentAddresses: DeploymentAddresses = <DeploymentAddresses>(
     await getElementDeploymentAddresses(
-      "https://raw.githubusercontent.com/element-fi/elf-deploy/main/addresses/goerli.json"
+      "https://raw.githubusercontent.com/element-fi/elf-deploy/main/addresses/mainnet.json"
     )
   );
-
-  for (const trancheListKey in deploymentAddresses.tranches) {
+  for (const trancheListKey of terms) {
     const trancheList = deploymentAddresses.tranches[trancheListKey];
     for (const tranche of trancheList) {
       const ptPool = tranche.ptPool.address;
@@ -68,8 +95,8 @@ async function main() {
 
       const totalSupply = await getTotalSupply(ptPool, signer);
       let reserves = await getReserves(ptPool, balancerVaultAddress, signer);
-      const ptIndex = reserves.tokens[0].toLowerCase() == base ? 1 : 0;
-      let baseIndex = reserves.tokens[0].toLowerCase() == base ? 0 : 1;
+      const ptIndex = reserves.tokens[0].toLowerCase() == base.toLowerCase() ? 1 : 0;
+      let baseIndex = reserves.tokens[0].toLowerCase() == base.toLowerCase() ? 0 : 1;
       const ptReserves = reserves.balances[ptIndex];
       let baseReserves = reserves.balances[baseIndex];
       const baseDecimals = reserves.decimals[baseIndex];
@@ -84,16 +111,21 @@ async function main() {
         baseDecimals
       );
 
-      const fixedAPR = calcFixedAPR(ptSpotPrice, timeRemainingSeconds).toFixed(
-        2
-      );
-
-      var row = trancheListKey + "," + fixedAPR
-      var fs = require('fs');
-      fs.write("values.csv", row, 'a'); 
+      const fixedAPR = calcFixedAPR(ptSpotPrice, timeRemainingSeconds).toFixed(2);
+      if (+fixedAPR > 0) {
+      body += trancheListKey.toUpperCase() + ": " + fixedAPR + "%\n";
+      }
+      }
 
     }
+    return body;
   }
+  
+async function main(){
+  const terms = ["dai","stecrv","lusd3crv-f", "crvtricrypto",];
+  const data: string = await generateAPR(terms);
+  console.log(data);
+  await sendTweet(data);
 }
 
 main();

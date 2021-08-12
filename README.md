@@ -9,3 +9,7 @@ Uses the [elf-sdk](https://github.com/element-fi/elf-sdk) to pull fixed APR's fr
 ```bash
 git clone https://github.com/element-fi/elf-twitter-bot.git
 npm install
+
+npm install twit
+
+ npx hardhat run src/index.ts --network  mainnet
