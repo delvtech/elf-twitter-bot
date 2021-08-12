@@ -67,7 +67,6 @@ async function main() {
   });
 
   fs.createReadStream(__dirname + "/values.csv").pipe(parser);
-
 }
 
 main();

@@ -58,8 +58,7 @@ async function sendTweet(tweetBody: string) {
   );
 }
 
-async function generateAPR(terms: string[]): Promise<string>{
-
+async function generateAPR(terms: string[]): Promise<string> {
   let body = "";
 
   const [signer] = await ethers.getSigners();
@@ -95,8 +94,10 @@ async function generateAPR(terms: string[]): Promise<string>{
 
       const totalSupply = await getTotalSupply(ptPool, signer);
       let reserves = await getReserves(ptPool, balancerVaultAddress, signer);
-      const ptIndex = reserves.tokens[0].toLowerCase() == base.toLowerCase() ? 1 : 0;
-      let baseIndex = reserves.tokens[0].toLowerCase() == base.toLowerCase() ? 0 : 1;
+      const ptIndex =
+        reserves.tokens[0].toLowerCase() == base.toLowerCase() ? 1 : 0;
+      let baseIndex =
+        reserves.tokens[0].toLowerCase() == base.toLowerCase() ? 0 : 1;
       const ptReserves = reserves.balances[ptIndex];
       let baseReserves = reserves.balances[baseIndex];
       const baseDecimals = reserves.decimals[baseIndex];
@@ -111,18 +112,19 @@ async function generateAPR(terms: string[]): Promise<string>{
         baseDecimals
       );
 
-      const fixedAPR = calcFixedAPR(ptSpotPrice, timeRemainingSeconds).toFixed(2);
+      const fixedAPR = calcFixedAPR(ptSpotPrice, timeRemainingSeconds).toFixed(
+        2
+      );
       if (+fixedAPR > 0) {
-      body += trancheListKey.toUpperCase() + ": " + fixedAPR + "%\n";
+        body += trancheListKey.toUpperCase() + ": " + fixedAPR + "%\n";
       }
-      }
-
     }
-    return body;
   }
-  
-async function main(){
-  const terms = ["dai","stecrv","lusd3crv-f", "crvtricrypto",];
+  return body;
+}
+
+async function main() {
+  const terms = ["dai", "stecrv", "lusd3crv-f", "crvtricrypto"];
   const data: string = await generateAPR(terms);
   console.log(data);
   await sendTweet(data);
