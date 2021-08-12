@@ -12,4 +12,6 @@ npm install
 
 npm install twit
 
+./clone-sdk
+
  npx hardhat run src/index.ts --network  mainnet

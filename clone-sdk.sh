@@ -7,7 +7,7 @@ cd elf-sdk
 # SDK setup
 npm install
 npm run load-contracts
-npm run generate-interfaces
+npm run generate interfaces
 npm run build
 
 # test that it's working
