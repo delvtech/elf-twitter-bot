@@ -18,20 +18,13 @@
   "homepage": "https://github.com/element-fi/elf-twitter-bot#readme",
   "dependencies": {
     "csv-parse": "^4.16.0",
+    "ethers": "^5.4.2",
     "hardhat": "^2.5.0",
     "node-csv": "^0.1.2",
     "shelljs": "^0.8.4",
     "twit": "^2.2.11"
   },
   "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.0.2",
-    "@nomiclabs/hardhat-waffle": "^2.0.1",
-    "@types/node": "^16.4.1",
-    "ethereum-waffle": "^3.4.0",
-    "ethers": "^5.4.4",
-    "hardhat-typechain": "^0.3.5",
-    "ts-generator": "^0.1.1",
-    "ts-node": "^10.2.0",
-    "typechain": "^5.1.2"
+    "@types/node": "^16.4.1"
   }
 }
