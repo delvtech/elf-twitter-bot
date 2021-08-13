@@ -32,6 +32,8 @@ import { getUnitSeconds } from "../elf-sdk/src/helpers/getUnitSeconds";
 import { calcSpotPricePt } from "../elf-sdk/src/helpers/calcSpotPrice";
 import { calcFixedAPR } from "../elf-sdk/src/helpers/calcFixedAPR";
 
+const termMap = {"dai":"DAI", "usdc":"USDC", "stecrv":"crvSTETH", "lusd3crv-f":"crvLUSD", "crvtricrypto":"crvTriCrypto", "crv3crypto": "crv3Crypto"};
+
 async function sendTweet(tweetBody: string) {
   // Initialize Twitter env variables
   const CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY || "";
@@ -59,7 +61,7 @@ async function sendTweet(tweetBody: string) {
 }
 
 async function generateAPR(terms: string[]): Promise<string> {
-  let body = "";
+  let body = "Today's Fixed Rate Report:\n\n";
 
   const [signer] = await ethers.getSigners();
 
@@ -71,6 +73,7 @@ async function generateAPR(terms: string[]): Promise<string> {
   );
   for (const trancheListKey of terms) {
     const trancheList = deploymentAddresses.tranches[trancheListKey];
+    const termName = termMap[trancheListKey];
     for (const tranche of trancheList) {
       const ptPool = tranche.ptPool.address;
       const trancheAddress = tranche.address;
@@ -116,7 +119,7 @@ async function generateAPR(terms: string[]): Promise<string> {
         2
       );
       if (+fixedAPR > 0) {
-        body += trancheListKey.toUpperCase() + ": " + fixedAPR + "%\n";
+        body += termName + ": " + fixedAPR + "%\n";
       }
     }
   }
@@ -124,7 +127,7 @@ async function generateAPR(terms: string[]): Promise<string> {
 }
 
 async function main() {
-  const terms = ["dai", "stecrv", "lusd3crv-f", "crvtricrypto"];
+  const terms = ["dai", "stecrv", "lusd3crv-f", "crvtricrypto", "crv3crypto", "usdc"];
   const data: string = await generateAPR(terms);
   console.log(data);
   await sendTweet(data);
