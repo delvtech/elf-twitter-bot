@@ -61,7 +61,7 @@ async function sendTweet(tweetBody: string) {
 }
 
 async function generateAPR(terms: string[]): Promise<string> {
-  let body = "Today's Fixed Rate Report:\n\n";
+  let body = "🌤Today's Fixed Rate Report🌤\n\n";
 
   const [signer] = await ethers.getSigners();
 
