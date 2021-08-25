@@ -31,6 +31,7 @@ import { getReserves } from "../elf-sdk/src/helpers/getReserves";
 import { getUnitSeconds } from "../elf-sdk/src/helpers/getUnitSeconds";
 import { calcSpotPricePt } from "../elf-sdk/src/helpers/calcSpotPrice";
 import { calcFixedAPR } from "../elf-sdk/src/helpers/calcFixedAPR";
+import { ONE_DAY_IN_SECONDS } from "../elf-sdk/src/constants/time";
 
 const termMap = {"dai":"DAI", "usdc":"USDC", "stecrv":"crvSTETH", "lusd3crv-f":"crvLUSD", "crvtricrypto":"crvTriCrypto", "crv3crypto": "crv3Crypto"};
 
@@ -61,7 +62,7 @@ async function sendTweet(tweetBody: string) {
 }
 
 async function generateAPR(terms: string[]): Promise<string> {
-  let body = "🌤Today's Fixed Rate Report🌤\n\n";
+  let body = "Today's @element_fi Fixed Rate Report🌤\n\n";
 
   const [signer] = await ethers.getSigners();
 
@@ -89,6 +90,7 @@ async function generateAPR(terms: string[]): Promise<string> {
         signer,
         blockTimeStamp
       );
+      const timeRemainingDays = Math.ceil(timeRemainingSeconds / ONE_DAY_IN_SECONDS);
 
       const base = await getBaseTokenAddress(
         deploymentAddresses,
@@ -119,10 +121,11 @@ async function generateAPR(terms: string[]): Promise<string> {
         2
       );
       if (+fixedAPR > 0) {
-        body += termName + ": " + fixedAPR + "%\n";
+        body += termName + ": " + fixedAPR + "% (" + timeRemainingDays + ")\n";
       }
     }
   }
+  body += "\nRates currently available at http://save.element.fi";
   return body;
 }
 
