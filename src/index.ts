@@ -125,7 +125,7 @@ async function generateAPR(terms: string[]): Promise<string> {
       }
     }
   }
-  body += "\nRates currently available at http://save.element.fi";
+  body += "Asset APR (Days Remaining)\n\nRates currently available at http://save.element.fi";
   return body;
 }
 
