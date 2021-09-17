@@ -33,6 +33,7 @@ import { calcSpotPricePt } from "../elf-sdk/src/helpers/calcSpotPrice";
 import { calcFixedAPR } from "../elf-sdk/src/helpers/calcFixedAPR";
 import { ONE_DAY_IN_SECONDS } from "../elf-sdk/src/constants/time";
 
+// Maps the keys from mainnet.json manifest to a more human-friendly format
 const termMap = {"wbtc":"wBTC","dai":"DAI", "usdc":"USDC", "stecrv":"crvSTETH", "lusd3crv-f":"crvLUSD", "crvtricrypto":"crvTriCrypto", "crv3crypto": "crv3Crypto"};
 
 async function sendTweet(tweetBody: string) {
@@ -62,6 +63,7 @@ async function sendTweet(tweetBody: string) {
 }
 
 async function generateAPR(terms: string[]): Promise<string> {
+  // Initialize main body of tweet with first line
   let body = "Today's @element_fi Fixed Rate Report🌤\n\n";
 
   const [signer] = await ethers.getSigners();
@@ -75,6 +77,7 @@ async function generateAPR(terms: string[]): Promise<string> {
   for (const trancheListKey of terms) {
     const trancheList = deploymentAddresses.tranches[trancheListKey];
     const termName = termMap[trancheListKey];
+    body += termName + ": ";
     for (const tranche of trancheList) {
       const ptPool = tranche.ptPool.address;
       const trancheAddress = tranche.address;
@@ -121,19 +124,43 @@ async function generateAPR(terms: string[]): Promise<string> {
         2
       );
       if (+fixedAPR > 0) {
-        body += termName + ": " + fixedAPR + "% (" + timeRemainingDays + ")\n";
+        // append APR percentage and days remaining to the current line formatted: <APR>% (<days_left>d)
+        body += fixedAPR + "% (" + timeRemainingDays + "d), ";
       }
     }
+    // After above loop, line has a trailing comma and space
+    // remove and add newline after this term type
+    body = body.substring(0, body.length - 2) + "\n";
   }
-  body += "Asset APR (Days Remaining)\n\nRates currently available at https://app.element.fi/fixedrates/";
+  body += "Asset APR (Days Remaining)\n\nFind more rates available at https://app.element.fi/fixedrates/";
   return body;
 }
 
+// Randomly chooses numExtraTerms items from termsRemaining
+async function pickExtraTerms(termsRemaining: string[], numExtraTerms: number): Promise<string[]> {
+  var returnTerms = [];
+  for (let i = 0; i < numExtraTerms; i++) {
+    // Use random number to choose an index
+    var index = Math.floor(Math.random() * (termsRemaining.length));
+
+    // Add element to return array and delete from remaining
+    returnTerms.push(termsRemaining[index]);
+    termsRemaining.splice(index, 1);
+  }
+  return returnTerms;
+}
+
 async function main() {
-  const terms = ["wbtc","dai", "stecrv", "lusd3crv-f", "crvtricrypto", "crv3crypto", "usdc"];
+  // These are our most popular terms, so we'll show them in every tweet
+  const priorityTerms = ["wbtc", "stecrv", "usdc"];
+
+  // Randomly choose 2 of the remaining terms to also appear in tweet
+  const termsRemaining = ["dai", "lusd3crv-f", "crv3crypto"];
+  const terms = priorityTerms.concat(await pickExtraTerms(termsRemaining, 2));
+
   const data: string = await generateAPR(terms);
   console.log(data);
-  await sendTweet(data);
+  //await sendTweet(data);
 }
 
 main();
