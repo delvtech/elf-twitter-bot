@@ -130,7 +130,7 @@ async function generateAPR(terms: string[]): Promise<string> {
 }
 
 async function main() {
-  const terms = ["dai", "stecrv", "lusd3crv-f", "crvtricrypto", "crv3crypto", "usdc"];
+  const terms = ["wbtc","dai", "stecrv", "lusd3crv-f", "crvtricrypto", "crv3crypto", "usdc"];
   const data: string = await generateAPR(terms);
   console.log(data);
   await sendTweet(data);
