@@ -33,7 +33,7 @@ import { calcSpotPricePt } from "../elf-sdk/src/helpers/calcSpotPrice";
 import { calcFixedAPR } from "../elf-sdk/src/helpers/calcFixedAPR";
 import { ONE_DAY_IN_SECONDS } from "../elf-sdk/src/constants/time";
 
-const termMap = {"dai":"DAI", "usdc":"USDC", "stecrv":"crvSTETH", "lusd3crv-f":"crvLUSD", "crvtricrypto":"crvTriCrypto", "crv3crypto": "crv3Crypto"};
+const termMap = {"wbtc":"wBTC","dai":"DAI", "usdc":"USDC", "stecrv":"crvSTETH", "lusd3crv-f":"crvLUSD", "crvtricrypto":"crvTriCrypto", "crv3crypto": "crv3Crypto"};
 
 async function sendTweet(tweetBody: string) {
   // Initialize Twitter env variables
