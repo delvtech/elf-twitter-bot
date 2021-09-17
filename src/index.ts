@@ -160,7 +160,7 @@ async function main() {
 
   const data: string = await generateAPR(terms);
   console.log(data);
-  //await sendTweet(data);
+  await sendTweet(data);
 }
 
 main();
