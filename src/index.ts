@@ -34,7 +34,7 @@ import { calcFixedAPR } from "../elf-sdk/src/helpers/calcFixedAPR";
 import { ONE_DAY_IN_SECONDS } from "../elf-sdk/src/constants/time";
 
 // Maps the keys from mainnet.json manifest to a more human-friendly format
-const termMap = {"wbtc":"wBTC","dai":"DAI", "usdc":"USDC", "stecrv":"crvSTETH", "lusd3crv-f":"crvLUSD", "crvtricrypto":"crvTriCrypto", "crv3crypto": "crv3Crypto"};
+const termMap = {"eurscrv":"crvEURS", "mim-3lp3crv-f": "crvMIM", "alusd3crv-f": "crvALUSD", "wbtc":"wBTC","dai":"DAI", "usdc":"USDC", "stecrv":"crvSTETH", "lusd3crv-f":"crvLUSD", "crvtricrypto":"crvTriCrypto", "crv3crypto": "crv3Crypto"};
 
 async function sendTweet(tweetBody: string) {
   // Initialize Twitter env variables
@@ -155,7 +155,7 @@ async function main() {
   const priorityTerms = ["wbtc", "stecrv", "usdc"];
 
   // Randomly choose 2 of the remaining terms to also appear in tweet
-  const termsRemaining = ["dai", "lusd3crv-f", "crv3crypto"];
+  const termsRemaining = ["dai", "lusd3crv-f", "crv3crypto", "alusd3crv-f", "mim-3lp3crv-f", "eurscrv"];
   const terms = priorityTerms.concat(await pickExtraTerms(termsRemaining, 2));
 
   const data: string = await generateAPR(terms);
