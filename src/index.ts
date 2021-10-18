@@ -18,20 +18,18 @@ import { ethers } from "hardhat";
 import {
   getElementDeploymentAddresses,
   getBaseTokenAddress,
-} from "../elf-sdk/src/helpers/getElementAddresses";
-import {
-  getTermTokenSymbols,
-  TermTokenSymbolsResult,
-} from "../elf-sdk/src/helpers/getTermTokenSymbols";
+} from "elf-sdk";
+import { TermTokenSymbolsResult } from "../elf-sdk/src/helpers/getTermTokenSymbols";
+import { getTermTokenSymbols } from "elf-sdk";
 import { DeploymentAddresses } from "../elf-sdk/typechain/DeploymentAddresses";
-import { getTimeUntilExpiration } from "../elf-sdk/src/helpers/getTimeUntilExpiration";
-import { getLatestBlockTimestamp } from "../elf-sdk/src/helpers/getLatestBlockTimestamp";
-import { getTotalSupply } from "../elf-sdk/src/helpers/getTotalSupply";
-import { getReserves } from "../elf-sdk/src/helpers/getReserves";
-import { getUnitSeconds } from "../elf-sdk/src/helpers/getUnitSeconds";
-import { calcSpotPricePt } from "../elf-sdk/src/helpers/calcSpotPrice";
-import { calcFixedAPR } from "../elf-sdk/src/helpers/calcFixedAPR";
-import { ONE_DAY_IN_SECONDS } from "../elf-sdk/src/constants/time";
+import { getTimeUntilExpiration } from "elf-sdk";
+import { getLatestBlockTimestamp } from "elf-sdk";
+import { getTotalSupply } from "elf-sdk";
+import { getReserves } from "elf-sdk";
+import { getUnitSeconds } from "elf-sdk";
+import { calcSpotPricePt } from "elf-sdk";
+import { calcFixedAPR } from "elf-sdk";
+import { ONE_DAY_IN_SECONDS } from "elf-sdk";
 
 // Maps the keys from mainnet.json manifest to a more human-friendly format
 const termMap = {"eurscrv":"crvEURS", "mim-3lp3crv-f": "crvMIM", "alusd3crv-f": "crvALUSD", "wbtc":"wBTC","dai":"DAI", "usdc":"USDC", "stecrv":"crvSTETH", "lusd3crv-f":"crvLUSD", "crvtricrypto":"crvTriCrypto", "crv3crypto": "crv3Crypto"};
