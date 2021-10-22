@@ -19,9 +19,9 @@ import {
   getElementDeploymentAddresses,
   getBaseTokenAddress,
 } from "elf-sdk";
-import { TermTokenSymbolsResult } from "../elf-sdk/src/helpers/getTermTokenSymbols";
 import { getTermTokenSymbols } from "elf-sdk";
-import { DeploymentAddresses } from "../elf-sdk/typechain/DeploymentAddresses";
+//import { DeploymentAddresses } from "../elf-sdk/typechain/DeploymentAddresses";
+import { TermTokenSymbolsResult } from "elf-sdk";
 import { getTimeUntilExpiration } from "elf-sdk";
 import { getLatestBlockTimestamp } from "elf-sdk";
 import { getTotalSupply } from "elf-sdk";
@@ -67,11 +67,12 @@ async function generateAPR(terms: string[]): Promise<string> {
   const [signer] = await ethers.getSigners();
 
   // get the official list of Element deployed addresses.
-  const deploymentAddresses: DeploymentAddresses = <DeploymentAddresses>(
-    await getElementDeploymentAddresses(
-      "https://raw.githubusercontent.com/element-fi/elf-deploy/main/addresses/mainnet.json"
-    )
-  );
+  // const deploymentAddresses: DeploymentAddresses = <DeploymentAddresses>(
+  //   await getElementDeploymentAddresses(
+  //     "https://raw.githubusercontent.com/element-fi/elf-deploy/main/addresses/mainnet.json"
+  //   )
+  // );
+  const deploymentAddresses = {"tranches":"", "balancerVault":""};
   for (const trancheListKey of terms) {
     const trancheList = deploymentAddresses.tranches[trancheListKey];
     const termName = termMap[trancheListKey];
@@ -82,8 +83,9 @@ async function generateAPR(terms: string[]): Promise<string> {
       const balancerVaultAddress = deploymentAddresses.balancerVault;
 
       // get the symbols for the term address
-      const termTokenSymbols: TermTokenSymbolsResult =
-        await getTermTokenSymbols(trancheAddress, signer);
+      // const termTokenSymbols: TermTokenSymbolsResult =
+      //   await getTermTokenSymbols(trancheAddress, signer);
+      const termTokenSymbols = "";
 
       const blockTimeStamp = await getLatestBlockTimestamp();
       const timeRemainingSeconds = await getTimeUntilExpiration(
@@ -156,9 +158,11 @@ async function main() {
   const termsRemaining = ["dai", "lusd3crv-f", "crv3crypto", "alusd3crv-f", "mim-3lp3crv-f", "eurscrv"];
   const terms = priorityTerms.concat(await pickExtraTerms(termsRemaining, 2));
 
-  const data: string = await generateAPR(terms);
+  // const data: string = await generateAPR(terms);
+  const data = "hw";
   console.log(data);
-  await sendTweet(data);
+  // await sendTweet(data);
 }
 
 main();
+ ``
