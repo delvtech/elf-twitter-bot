@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "update-elf-sdk": "npm install git+https://github.com/element-fi/elf-sdk.git#smmackey/bugfix"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.1",
@@ -32,6 +33,7 @@
     "typescript": "^4.1.3"
   },
   "dependencies": {
+    "elf-sdk": "git+https://github.com/element-fi/elf-sdk.git#smmackey/bugfix",
     "twit": "^2.2.11"
   }
 }
